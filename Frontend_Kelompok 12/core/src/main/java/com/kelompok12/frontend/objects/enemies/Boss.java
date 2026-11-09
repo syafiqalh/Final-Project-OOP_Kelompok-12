@@ -1,4 +1,4 @@
-package com.kelompok12.frontend.enemies;
+package com.kelompok12.frontend.objects.enemies;
 
 public class Boss extends Enemy {
 
