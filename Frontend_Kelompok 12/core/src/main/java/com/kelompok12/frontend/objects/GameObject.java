@@ -15,6 +15,7 @@ public abstract class GameObject implements Collidable{
     protected float height;
     protected float speed;
     protected Color color;
+    protected int damage;
     protected boolean active = true;
     protected TextureRegion sprite;
     protected Animation<TextureRegion> animation;
