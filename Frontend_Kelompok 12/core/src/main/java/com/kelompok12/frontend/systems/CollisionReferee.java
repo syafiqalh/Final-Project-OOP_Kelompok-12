@@ -46,12 +46,14 @@ public class CollisionReferee {
         if (a instanceof Projectile && b instanceof Enemy) {
             projectile = (Projectile) a;
             enemy = (Enemy) b;
+        } else if (a instanceof Enemy && b instanceof Projectile) {
+            enemy = (Enemy) a;
+            projectile = (Projectile) b;
         }
 
         if (projectile != null && enemy != null) {
             return handleProjectileEnemyCollision(projectile, enemy);
         }
-
         return false;
     }
 
@@ -72,6 +74,7 @@ public class CollisionReferee {
             int damage = projectile.getDamage();
             projectile.destroy();
             enemy.takeDamage(damage);
+            System.out.println("enemy ditembak");
 
             projectile.onCollision(enemy);
             enemy.onCollision(projectile);
@@ -80,4 +83,5 @@ public class CollisionReferee {
 
         return false;
     }
+
 }
