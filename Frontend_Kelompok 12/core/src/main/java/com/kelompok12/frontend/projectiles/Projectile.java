@@ -9,13 +9,42 @@ public class Projectile extends GameObject {
     private float vx, vy;
     private float angle;
 
-    Projectile(float x, float y, ProjectileType projectileType, int damage){
-        super(x, y, 16 , 16, 1000, Color.YELLOW);
+    public Projectile(float x, float y, ProjectileType projectileType, int damage) {
+        super(x, y, 16f, 16f, 100f, Color.YELLOW);
         this.projectileType = projectileType;
         this.damage = damage;
-        this.vx = 0f;
+        this.vx = this.speed;
         this.vy = 0f;
-        this.angle = 0f;
+        this.angle = (float) Math.toDegrees(Math.atan2(vy, vx));
+    }
+
+    public Projectile(float x, float y, float vx, float vy, ProjectileType projectileType, int damage) {
+        super(x, y, 16f, 16f, 100f, Color.YELLOW);
+        this.projectileType = projectileType;
+        this.damage = damage;
+        this.vx = vx;
+        this.vy = vy;
+        this.angle = (float) Math.toDegrees(Math.atan2(vy, vx));
+    }
+
+    @Override
+    public void update(float delta) {
+        super.update(delta);
+        this.x += vx * delta;
+        this.y += vy * delta;
+    }
+
+    public void setVelocity(float vx, float vy) {
+        this.vx = vx;
+        this.vy = vy;
+        this.angle = (float) Math.toDegrees(Math.atan2(vy, vx));
+    }
+
+    public void setDirection(float angleDegrees) {
+        this.angle = angleDegrees;
+        float rad = (float) Math.toRadians(angleDegrees);
+        this.vx = (float) Math.cos(rad) * speed;
+        this.vy = (float) Math.sin(rad) * speed;
     }
 
     public ProjectileType getProjectileType() {
