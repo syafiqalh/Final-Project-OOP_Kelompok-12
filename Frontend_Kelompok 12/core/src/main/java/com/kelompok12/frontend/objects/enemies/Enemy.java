@@ -1,17 +1,53 @@
+
 package com.kelompok12.frontend.objects.enemies;
 
-public class Enemy {
+import com.badlogic.gdx.graphics.Color;
+import com.kelompok12.frontend.objects.GameObject;
+
+public class Enemy extends GameObject {
+
     protected String name;
     protected int hp;
     protected int maxHP;
-    protected float x;
-    protected float y;
 
     public Enemy(String name, int hp, float x, float y) {
+        super(x, y, 32f, 32f, 100f, Color.RED);
+
         this.name = name;
-        this.hp = hp;
-        this.maxHP = hp;
-        this.x = x;
-        this.y = y;
+        this.hp = Math.max(0, hp);
+        this.maxHP = this.hp;
+
+        if (this.hp == 0) {
+            destroy();
+        }
+    }
+
+    public void takeDamage(int damage) {
+        if (damage <= 0 || !isActive()) {
+            return;
+        }
+
+        this.hp -= damage;
+
+        if (this.hp <= 0) {
+            this.hp = 0;
+            destroy();
+        }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public int getMaxHP() {
+        return maxHP;
+    }
+
+    public boolean isAlive() {
+        return hp > 0 && isActive();
     }
 }
