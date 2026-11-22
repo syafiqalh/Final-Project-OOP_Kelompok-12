@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.Color;
 public class EXP extends GameObject {
     private int amount;
 
-    EXP(float x, float y, int amount) {
-        super(x, y, 8, 8, 0, Color.GREEN);
+    public EXP(float x, float y, int amount) {
+        super(x, y, 16, 16, 0, Color.GREEN);
         this.amount = amount;
     }
 

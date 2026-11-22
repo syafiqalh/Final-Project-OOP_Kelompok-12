@@ -19,6 +19,7 @@ public abstract class GameObject implements Collidable{
     protected boolean active = true;
     protected TextureRegion sprite;
     protected Animation<TextureRegion> animation;
+    protected float stateTime = 0f;
 
     public GameObject(float x, float y, float width, float height, float speed, Color color) {
         this.x = x;
@@ -65,6 +66,12 @@ public abstract class GameObject implements Collidable{
         // Nanti saja
     }
 
+    public boolean isOffScreen(float screenWidth, float screenHeight) {
+        if (this.x < -100 || this.x > screenWidth + 100 || this.y < -100 || this.y > screenHeight + 100) {
+            return true;
+        }
+        else return false;
+    }
 
     public boolean isActive() {
         return active;

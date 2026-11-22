@@ -3,6 +3,7 @@ package com.kelompok12.frontend.objects.enemies;
 
 import com.badlogic.gdx.graphics.Color;
 import com.kelompok12.frontend.objects.GameObject;
+import com.kelompok12.frontend.systems.EntityFactory;
 
 public class Enemy extends GameObject {
 

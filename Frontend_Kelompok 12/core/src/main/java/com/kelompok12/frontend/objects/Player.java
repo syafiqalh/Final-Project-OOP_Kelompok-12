@@ -11,6 +11,7 @@ public class Player extends GameObject{
     private int hp = 100;
     private int maxHp = hp;
     private int damage = 15;
+    private int exp = 0;
 
     private float lastX = 1f;
     private float lastY = 0f;
@@ -94,4 +95,11 @@ public class Player extends GameObject{
         this.hp = hp;
     }
 
+    public int getExp() {
+        return exp;
+    }
+
+    public void setExp(int exp) {
+        this.exp = exp;
+    }
 }

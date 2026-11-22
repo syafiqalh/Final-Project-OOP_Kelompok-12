@@ -9,22 +9,15 @@ public class Projectile extends GameObject {
     private float vx, vy;
     private float angle;
 
-    public Projectile(float x, float y, ProjectileType projectileType, int damage) {
-        super(x, y, 16f, 16f, 100f, Color.YELLOW);
-        this.projectileType = projectileType;
-        this.damage = damage;
-        this.vx = this.speed;
-        this.vy = 0f;
-        this.angle = (float) Math.toDegrees(Math.atan2(vy, vx));
-    }
-
     public Projectile(float x, float y, float vx, float vy, ProjectileType projectileType, int damage) {
-        super(x, y, 16f, 16f, 100f, Color.YELLOW);
+        super(x, y, 16f, 16f, 100f, projectileType == ProjectileType.ANTIDOTE ? Color.YELLOW : Color.MAGENTA);
         this.projectileType = projectileType;
         this.damage = damage;
         this.vx = vx;
         this.vy = vy;
-        this.angle = (float) Math.toDegrees(Math.atan2(vy, vx));
+        float calculatedAngle = (float) Math.toDegrees(Math.atan2(vy, vx));
+        if (calculatedAngle < 0) calculatedAngle += 360f;
+        this.angle = calculatedAngle;
     }
 
     @Override
@@ -32,6 +25,22 @@ public class Projectile extends GameObject {
         super.update(delta);
         this.x += vx * delta;
         this.y += vy * delta;
+    }
+
+    public void init(float x, float y, float vx, float vy, ProjectileType projectileType, int damage) {
+
+        this.x = x;
+        this.y = y;
+        this.vx = vx;
+        this.vy = vy;
+        float calculatedAngle = (float) Math.toDegrees(Math.atan2(vy, vx));
+        if (calculatedAngle < 0) calculatedAngle += 360f;
+        this.angle = calculatedAngle;
+        this.speed = (float) Math.hypot(vx, vy);
+        this.projectileType = projectileType;
+        this.color = projectileType == ProjectileType.ANTIDOTE ? Color.YELLOW : Color.MAGENTA;
+        this.active = true;
+        this.stateTime = 0;
     }
 
     public void setVelocity(float vx, float vy) {
