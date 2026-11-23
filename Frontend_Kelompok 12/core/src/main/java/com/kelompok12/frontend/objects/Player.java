@@ -1,10 +1,9 @@
 package com.kelompok12.frontend.objects;
 import com.badlogic.gdx.graphics.Color;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.kelompok12.frontend.projectiles.Projectile;
 import com.kelompok12.frontend.projectiles.ProjectileType;
+import com.kelompok12.frontend.systems.ProjectileManager;
 
 public class Player extends GameObject{
 
@@ -20,37 +19,22 @@ public class Player extends GameObject{
         super(x, y, 32f, 32f, 200f, Color.BLUE);
     }
 
-    @Override
-    public void update(float delta) {
-        float x = 0f;
-        float y = 0f;
-
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            y += 1f;
+    public void move(float dx, float dy) {
+        if (dx != 0f || dy != 0f) {
+            lastX = Math.signum(dx);    //biar di shoot nanti lastx nya gak 0, jadi gak 0 x 400f
+            lastY = Math.signum(dy);
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            y -= 1f;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            x -= 1f;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            x += 1f;
-        }
-
-        if (x != 0f || y != 0f) {
-            lastX = x;
-            lastY = y;
-        }
-
-        this.x += x * this.speed * delta;
-        this.y += y * this.speed * delta;
+        this.x += dx * this.speed;
+        this.y += dy * this.speed;
     }
 
-    public Projectile shoot() {
+    public void shoot(ProjectileManager projectileManager) {
+
+        if (projectileManager == null) {    //biar kalo lupa bikin instansiasi baru programnya gak crash
+            return;
+        }
+
         float spawnX = this.x + (this.width / 2f) - 8f;
         float spawnY = this.y + (this.height / 2f) - 8f;
 
@@ -58,7 +42,7 @@ public class Player extends GameObject{
         float vx = lastX * bulletSpeed;
         float vy = lastY * bulletSpeed;
 
-        return new Projectile(spawnX, spawnY, vx, vy, ProjectileType.ANTIDOTE, this.damage);
+        projectileManager.spawnPlayerProjectile(spawnX, spawnY, vx, vy, this.damage);
     }
 
     public void takeDamage(int damage) {
