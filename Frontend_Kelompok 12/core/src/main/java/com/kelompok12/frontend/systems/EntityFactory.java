@@ -1,5 +1,6 @@
 package com.kelompok12.frontend.systems;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.kelompok12.frontend.objects.EXP;
 import com.kelompok12.frontend.objects.Player;
 import com.kelompok12.frontend.objects.enemies.Boss;
@@ -14,20 +15,26 @@ public class EntityFactory {
         return new Player(x, y);
     }
 
-    public static Buzzer createBuzzer(float x, float y) {
-        return new Buzzer("Rakyat Biasa Terbius", 45, x, y);
+    public static Buzzer createBuzzer(float x, float y, Player target) {
+        return createBuzzer("Rakyat Biasa Terbius", 45, x, y, target);
     }
 
-    public static Buzzer createBuzzer(String name, int hp, float x, float y) {
-        return new Buzzer(name, hp, x, y);
+    public static Buzzer createBuzzer(String name, int hp, float x, float y, Player target) {
+        Buzzer buzzer = new Buzzer(name, hp, x, y, target);
+        TextureRegion idleSprite = AssetManager.getInstance().getTextureRegion("buzzer_down");
+        buzzer.setSprite(idleSprite);
+        return buzzer;
     }
 
     public static Satgas createSatgas(float x, float y) {
-        return new Satgas("Satgas MBG", 75, x, y);
+        return createSatgas("Satgas MBG", 75, x, y);
     }
 
     public static Satgas createSatgas(String name, int hp, float x, float y) {
-        return new Satgas(name, hp, x, y);
+        Satgas satgas = new Satgas(name, hp, x, y);
+        TextureRegion idleSprite = AssetManager.getInstance().getTextureRegion("satgas_down");
+        satgas.setSprite(idleSprite);
+        return satgas;
     }
 
     public static Boss createBoss(float x, float y) {
