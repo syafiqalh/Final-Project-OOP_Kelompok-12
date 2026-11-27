@@ -3,6 +3,7 @@ package com.kelompok12.frontend.systems;
 import com.kelompok12.frontend.objects.EXP;
 import com.kelompok12.frontend.objects.GameObject;
 import com.kelompok12.frontend.objects.Player;
+import com.kelompok12.frontend.objects.enemies.Buzzer;
 import com.kelompok12.frontend.objects.enemies.Enemy;
 import com.kelompok12.frontend.projectiles.Projectile;
 import com.kelompok12.frontend.projectiles.ProjectileType;
@@ -90,6 +91,10 @@ public class CollisionReferee {
     }
 
     public boolean handlePlayerEnemyCollision(Player player, Enemy enemy) {
+
+        if (enemy instanceof Buzzer) {
+            return false;
+        }
 
         if (player.getHitbox().overlaps(enemy.getHitbox())) {
             player.takeDamage(10);

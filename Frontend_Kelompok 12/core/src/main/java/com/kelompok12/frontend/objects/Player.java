@@ -16,7 +16,7 @@ public class Player extends GameObject{
     private float lastY = 0f;
 
     public Player(float x, float y) {
-        super(x, y, 32f, 32f, 200f, Color.BLUE);
+        super(x, y, 62f, 89f, 200f, Color.BLUE);
     }
 
     public void move(float dx, float dy) {

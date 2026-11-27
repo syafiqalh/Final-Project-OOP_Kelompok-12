@@ -23,6 +23,18 @@ public class Enemy extends GameObject {
         }
     }
 
+    public Enemy(float x, float y, float width, float height, Color color, String name, int hp) {
+        super(x, y, width, height, 100f, color);
+
+        this.name = name;
+        this.hp = Math.max(0, hp);
+        this.maxHP = this.hp;
+
+        if (this.hp == 0) {
+            destroy();
+        }
+    }
+
     public void takeDamage(int damage) {
         if (damage <= 0 || !isActive()) {
             return;

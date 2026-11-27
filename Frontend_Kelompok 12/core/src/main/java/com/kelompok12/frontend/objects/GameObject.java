@@ -7,12 +7,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
-
 public abstract class GameObject implements Collidable{
     protected float x;
     protected float y;
     protected float width;
     protected float height;
+    protected float spriteWidth; //just in case kalo ditanya, Buzzer gede karena biar sprite nyerang cukup
+    protected float spriteHeight; // Aslinya 62 x 89
     protected float speed;
     protected Color color;
     protected int damage;
@@ -26,6 +27,8 @@ public abstract class GameObject implements Collidable{
         this.y = y;
         this.width = width;
         this.height = height;
+        this.spriteWidth = width;
+        this.spriteHeight = height;
         this.speed = speed;
         this.color = color;
     }
@@ -42,6 +45,8 @@ public abstract class GameObject implements Collidable{
     public void setHitbox(float width, float height) {
         this.width = width;
         this.height = height;
+        this.spriteWidth = width;
+        this.spriteHeight = height;
     }
 
     @Override
@@ -63,7 +68,19 @@ public abstract class GameObject implements Collidable{
 
     // Render pakai sprite
     public void render(SpriteBatch batch) {
-        // Nanti saja
+        if (batch != null && active) {
+            TextureRegion currentFrame = null;
+            if (animation != null) {
+                currentFrame = animation.getKeyFrame(stateTime);
+            } else if (sprite != null) {
+                currentFrame = sprite;
+            }
+            if (currentFrame != null) {
+                float drawX = x - Math.round((spriteWidth - width) / 2f);
+                float drawY = y - Math.round((spriteHeight - height) / 2f); //Biar sprite ada di tengah karena kegedean
+                batch.draw(currentFrame, drawX, drawY, spriteWidth, spriteHeight);
+            }
+        }
     }
 
     public boolean isOffScreen(float screenWidth, float screenHeight) {
@@ -117,5 +134,38 @@ public abstract class GameObject implements Collidable{
         this.color = color;
     }
 
+    public void setSprite(TextureRegion sprite) {
+        this.sprite = sprite;
+    }
+
+    public TextureRegion getSprite() {
+        return this.sprite;
+    }
+
+    public void setAnimation(Animation<TextureRegion> animation) {
+        if (this.animation != animation) {
+            this.animation = animation;
+            this.stateTime = 0f;
+        }
+    }
+
+    public Animation<TextureRegion> getAnimation() {
+        return this.animation;
+    }
+
+    public float getStateTime() {
+        return stateTime;
+    }
+
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
+    }
+
+    public void setSpriteSize(float width, float height) {
+        if (width > 0f && height > 0f) {
+            this.spriteWidth = width;
+            this.spriteHeight = height;
+        }
+    }
 }
 

@@ -3,6 +3,7 @@ package com.kelompok12.frontend;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.kelompok12.frontend.commands.Command;
@@ -17,6 +18,7 @@ import com.kelompok12.frontend.objects.enemies.Buzzer;
 import com.kelompok12.frontend.objects.enemies.Enemy;
 import com.kelompok12.frontend.objects.enemies.Satgas;
 import com.kelompok12.frontend.projectiles.Projectile;
+import com.kelompok12.frontend.systems.AssetManager;
 import com.kelompok12.frontend.systems.CollisionReferee;
 import com.kelompok12.frontend.systems.EntityFactory;
 import com.kelompok12.frontend.systems.ProjectileManager;
@@ -37,9 +39,13 @@ public class Main extends ApplicationAdapter {
     private List<Enemy> enemies;
     private boolean inMenu = false;
 
+    private SpriteBatch batch;
+
     @Override
     public void create() {
         shapeRenderer = new ShapeRenderer();
+        batch = new SpriteBatch();
+        AssetManager.getInstance().init();
         collisionReferee = new CollisionReferee();
         projectileManager = new ProjectileManager();
         inputHandler = new InputHandler();
@@ -51,7 +57,7 @@ public class Main extends ApplicationAdapter {
         entities.add(player);
 
         enemies = new ArrayList<>();
-        enemies.add(EntityFactory.createBuzzer("Rakyat Biasa Terbius", 45, 420f, 300f));
+        enemies.add(EntityFactory.createBuzzer("Rakyat Biasa Terbius", 45, 420f, 300f, player));
         enemies.add(EntityFactory.createSatgas("Satgas MBG", 75, 500f, 380f));
         enemies.add(EntityFactory.createBoss("Presiden Tiran", 150, 560f, 200f));
         entities.addAll(enemies);
@@ -136,12 +142,19 @@ public class Main extends ApplicationAdapter {
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         for (GameObject obj : entities) {
-            if (obj.isActive() && !(obj instanceof Projectile)) {
+            if (obj.isActive() && !(obj instanceof Projectile) && !(obj instanceof Buzzer) && !(obj instanceof Satgas)) {
                 obj.render(shapeRenderer);
             }
         }
         projectileManager.render(shapeRenderer);
         shapeRenderer.end();
+        batch.begin();
+        for (GameObject obj : entities) {
+            if (obj.isActive() && (obj instanceof Buzzer || obj instanceof Satgas)) {
+                obj.render(batch);
+            }
+        }
+        batch.end();
     }
 
     private boolean isOutOfBounds(GameObject obj) {
@@ -158,6 +171,10 @@ public class Main extends ApplicationAdapter {
     @Override
     public void dispose() {
         shapeRenderer.dispose();
+        if (batch != null) {
+            batch.dispose();
+        }
+        AssetManager.getInstance().dispose();
         if (mainMenuScreen != null) {
             mainMenuScreen.dispose();
         }
