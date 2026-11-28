@@ -2,6 +2,7 @@ package com.kelompok12.frontend.projectiles;
 
 import com.badlogic.gdx.graphics.Color;
 import com.kelompok12.frontend.objects.GameObject;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Projectile extends GameObject {
     private ProjectileType projectileType;
@@ -10,6 +11,7 @@ public class Projectile extends GameObject {
     private float angle;
 
     public Projectile(float x, float y, float vx, float vy, ProjectileType projectileType, int damage) {
+        //atur ukuran peluru disini
         super(x, y, 16f, 16f, 100f, projectileType == ProjectileType.ANTIDOTE ? Color.YELLOW : Color.MAGENTA);
         this.projectileType = projectileType;
         this.damage = damage;
@@ -25,6 +27,20 @@ public class Projectile extends GameObject {
         super.update(delta);
         this.x += vx * delta;
         this.y += vy * delta;
+    }
+
+    @Override
+    public void render(SpriteBatch batch) { //untuk merotasi peluru agar gak ke kanan terus
+        if (sprite != null) {
+            batch.draw(
+                sprite,
+                x, y,
+                width / 2f, height / 2f,
+                width, height,
+                1f, 1f,
+                angle
+            );
+        }
     }
 
     public void init(float x, float y, float vx, float vy, ProjectileType projectileType, int damage) {
@@ -46,7 +62,13 @@ public class Projectile extends GameObject {
     public void setVelocity(float vx, float vy) {
         this.vx = vx;
         this.vy = vy;
-        this.angle = (float) Math.toDegrees(Math.atan2(vy, vx));
+        updateAngle();
+    }
+
+    private void updateAngle() {
+        float calculatedAngle = (float) Math.toDegrees(Math.atan2(vy, vx));
+        if (calculatedAngle < 0) calculatedAngle += 360f;
+        this.angle = calculatedAngle;
     }
 
     public void setDirection(float angleDegrees) {

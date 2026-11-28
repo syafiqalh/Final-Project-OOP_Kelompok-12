@@ -45,8 +45,13 @@ public class EntityFactory {
         return new Boss(name, hp, x, y);
     }
 
-    public static Projectile createPlayerProjectile(float x, float y,float vx, float vy, int damage) {
-        return new Projectile(x, y, vx, vy, ProjectileType.ANTIDOTE, damage);
+    public static Projectile createPlayerProjectile(float x, float y, float vx, float vy, int damage) {
+        Projectile projectile = new Projectile(x, y, vx, vy, ProjectileType.ANTIDOTE, damage);
+        TextureRegion bulletSprite = AssetManager.getInstance().getTextureRegion("bullet_player");
+        if (bulletSprite != null) {
+            projectile.setSprite(bulletSprite);
+        }
+        return projectile;
     }
 
     public static Projectile createEnemyProjectile(float x, float y, float vx, float vy, int damage) {

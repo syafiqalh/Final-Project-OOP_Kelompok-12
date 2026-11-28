@@ -1,5 +1,3 @@
-
-// PERUBAHAN: Package game kelompok
 package com.kelompok12.frontend.systems;
 
 import com.badlogic.gdx.Gdx;
@@ -42,6 +40,13 @@ public class AssetManager {
 
     public void registerRegion(String key, TextureRegion region) {
         textureRegionMap.put(key, region);
+    }
+
+    public void registerRegion(String key, String filename) {
+        Texture tex = loadTexture(filename);
+        if (tex != null) {
+            textureRegionMap.put(key, new TextureRegion(tex));
+        }
     }
 
     public void registerRegionFromSheet(String key, String filename, int tileWidth, int tileHeight, int row, int col) {
@@ -125,6 +130,8 @@ public class AssetManager {
         registerAnimationFromSheet("satgas_attack_up", "Satgas.png", 64, 91, 5, 0, 2, 1f / 12f, Animation.PlayMode.NORMAL);
         registerAnimationFromSheet("satgas_attack_right", "Satgas.png", 64, 91, 6, 0, 2, 1f / 12f, Animation.PlayMode.NORMAL);
         registerAnimationFromSheet("satgas_attack_left", "Satgas.png", 64, 91, 7, 0, 2, 1f / 12f, Animation.PlayMode.NORMAL);
+
+        registerRegion("bullet_player", "bullet_player.png");
     }
 
     public void dispose() {
