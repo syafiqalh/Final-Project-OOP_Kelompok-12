@@ -7,7 +7,7 @@ import java.util.List;
 
 public class InputHandler {
 
-    private int keyShoot = Input.Keys.Z;
+    private int keyShoot = Input.Buttons.LEFT;
 
 
     private final MoveCommand moveCommand = new MoveCommand(0f, 0f);
@@ -37,13 +37,22 @@ public class InputHandler {
             dx += 1f;
         }
 
+        if (dx != 0f && dy != 0f) { //biar arah gerak playernya kalau diagonal kecepatannya sama dengan kalau lurus
+            float invSqrt2 = 0.70710678f;
+            dx *= invSqrt2;
+            dy *= invSqrt2;
+        }
+
         if (dx != 0f || dy != 0f) {
             moveCommand.set(dx * delta, dy * delta);
             activeCommands.add(moveCommand);
         }
 
 
-        if (Gdx.input.isKeyJustPressed(keyShoot)) {
+        if (Gdx.input.isButtonPressed(keyShoot)) {
+            float mouseX = Gdx.input.getX();
+            float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
+            shootCommand.setTarget(mouseX, mouseY);
             activeCommands.add(shootCommand);
         }
 

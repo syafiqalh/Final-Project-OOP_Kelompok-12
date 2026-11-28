@@ -15,8 +15,18 @@ public class Player extends GameObject{
     private float lastX = 1f;
     private float lastY = 0f;
 
+    private float shootCooldown = 0.25f; // jeda antar tembakannya dalam detik, 0.25f = 4 peluru/detik
+    private float shootTimer = 0f;
+
     public Player(float x, float y) {
-        super(x, y, 62f, 89f, 200f, Color.BLUE);
+        super(x, y, 32f, 32f, 200f, Color.BLUE);
+    }
+
+    @Override
+    public void update(float delta) {
+        if (shootTimer > 0f) {
+            shootTimer -= delta;
+        }
     }
 
     public void move(float dx, float dy) {
@@ -29,20 +39,36 @@ public class Player extends GameObject{
         this.y += dy * this.speed;
     }
 
-    public void shoot(ProjectileManager projectileManager) {
-
-        if (projectileManager == null) {    //biar kalo lupa bikin instansiasi baru programnya gak crash
+    //soalnya tiap pencet nembak harus tau posisi target tembakan biar bisa gerak kesana
+    public void shoot(ProjectileManager projectileManager, float targetX, float targetY) {
+        if (projectileManager == null || shootTimer > 0f) { //biar tembakannya di jeda
             return;
         }
 
-        float spawnX = this.x + (this.width / 2f) - 8f;
-        float spawnY = this.y + (this.height / 2f) - 8f;
+        float centerX = this.x + (this.width / 2f);
+        float centerY = this.y + (this.height / 2f);
+
+        float dirX = targetX - centerX;
+        float dirY = targetY - centerY;
+        float length = (float) Math.hypot(dirX, dirY);
+
+        if (length > 0f) {
+            dirX /= length;
+            dirY /= length;
+        } else {
+            dirX = lastX;
+            dirY = lastY;
+        }
 
         float bulletSpeed = 400f;
-        float vx = lastX * bulletSpeed;
-        float vy = lastY * bulletSpeed;
+        float vx = dirX * bulletSpeed;
+        float vy = dirY * bulletSpeed;
+
+        float spawnX = centerX - 48f;
+        float spawnY = centerY - 24f;
 
         projectileManager.spawnPlayerProjectile(spawnX, spawnY, vx, vy, this.damage);
+        shootTimer = shootCooldown;
     }
 
     public void takeDamage(int damage) {
@@ -85,5 +111,15 @@ public class Player extends GameObject{
 
     public void setExp(int exp) {
         this.exp = exp;
+        System.out.println("EXP sekarang: " + this.exp);
     }
+
+    public float getShootCooldown() {
+        return shootCooldown;
+    }
+
+    public void setShootCooldown(float shootCooldown) {
+        this.shootCooldown = Math.max(0.05f, shootCooldown); // batas paling cepetnya 0.05 detik
+    }
+
 }

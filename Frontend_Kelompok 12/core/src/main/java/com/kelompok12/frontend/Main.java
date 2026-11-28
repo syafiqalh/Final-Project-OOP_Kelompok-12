@@ -98,9 +98,6 @@ public class Main extends ApplicationAdapter {
             command.execute(player, projectileManager);
         }
 
-        if (player.isActive() && (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched())) {
-            new ShootCommand().execute(player, projectileManager);
-        }
 
         projectileManager.update(delta, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
